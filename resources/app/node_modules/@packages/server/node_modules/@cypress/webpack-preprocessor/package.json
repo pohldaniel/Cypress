@@ -21,12 +21,13 @@
   "dependencies": {
     "bluebird": "3.7.1",
     "debug": "^4.3.4",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "semver": "^7.3.2"
   },
   "peerDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
-    "babel-loader": "^8.3 || ^9",
+    "babel-loader": "^8.3 || ^9 || ^10",
     "webpack": "^4 || ^5"
   },
   "files": [
@@ -49,9 +50,6 @@
   "nx": {
     "targets": {
       "build": {
-        "dependsOn": [
-          "!@cypress/react18:build"
-        ],
         "outputs": [
           "{projectRoot}/dist"
         ]

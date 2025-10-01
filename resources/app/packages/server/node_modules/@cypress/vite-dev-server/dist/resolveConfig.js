@@ -52,7 +52,7 @@ const createViteDevServerConfig = async (config, vite) => {
 exports.createViteDevServerConfig = createViteDevServerConfig;
 function makeCypressViteConfig(config, vite) {
     var _a, _b, _c;
-    const { cypressConfig: { experimentalJustInTimeCompile, port, projectRoot, devServerPublicPathRoute, supportFile, cypressBinaryRoot, isTextTerminal, }, specs, } = config;
+    const { cypressConfig: { port, projectRoot, devServerPublicPathRoute, supportFile, cypressBinaryRoot, isTextTerminal, }, specs, } = config;
     const vitePort = port !== null && port !== void 0 ? port : undefined;
     // Vite caches its output in the .vite directory in the node_modules where vite lives.
     // So we want to find that node_modules path and ensure it's added to the "allow" list
@@ -95,7 +95,7 @@ function makeCypressViteConfig(config, vite) {
                     // Supported from Vite v3 - add null check for v2 users.
                     (_a = vite.searchForWorkspaceRoot) === null || _a === void 0 ? void 0 : _a.call(vite, process.cwd()),
                 ],
-            }, port: vitePort, host: '127.0.0.1' }, (isTextTerminal && !experimentalJustInTimeCompile
+            }, port: vitePort, host: '127.0.0.1' }, (isTextTerminal
             ? { watch: { ignored: '**/*' }, hmr: false }
             : {})),
         plugins: [

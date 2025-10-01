@@ -57,7 +57,7 @@ class CypressCTWebpackPlugin {
          *
          * See https://github.com/cypress-io/cypress/issues/24398
          */
-        this.onSpecsChange = async (specs) => {
+        this.onSpecsChange = async ({ specs, options }) => {
             var _a;
             if (!this.compilation || lodash_1.default.isEqual(specs, this.files)) {
                 return;

@@ -63,7 +63,8 @@ async function makeWebpackConfig(config) {
     var _a, _b, _c;
     let userWebpackConfig = config.devServerConfig.webpackConfig;
     const frameworkWebpackConfig = config.frameworkConfig;
-    const { cypressConfig: { projectRoot, supportFile, }, specs: files, framework, } = config.devServerConfig;
+    const { cypressConfig: { projectRoot, supportFile, justInTimeCompile, }, framework, } = config.devServerConfig;
+    config.devServerConfig.specs = justInTimeCompile ? [] : config.devServerConfig.specs;
     if (!userWebpackConfig && !frameworkWebpackConfig) {
         debug('Not user or framework webpack config received. Trying to automatically source it');
         const configFile = await getWebpackConfigFromProjectRoot(projectRoot);
@@ -93,7 +94,7 @@ async function makeWebpackConfig(config) {
         : userWebpackConfig;
     const userAndFrameworkWebpackConfig = modifyWebpackConfigForCypress((0, webpack_merge_1.merge)(frameworkWebpackConfig !== null && frameworkWebpackConfig !== void 0 ? frameworkWebpackConfig : {}, userWebpackConfig !== null && userWebpackConfig !== void 0 ? userWebpackConfig : {}));
     debug(`User passed in user and framework webpack config with values %o`, userAndFrameworkWebpackConfig);
-    debug(`New webpack entries %o`, files);
+    debug(`New webpack entries %o`, config.devServerConfig.specs);
     debug(`Project root`, projectRoot);
     debug(`Support file`, supportFile);
     const mergedConfig = (0, webpack_merge_1.merge)(userAndFrameworkWebpackConfig, (0, makeDefaultWebpackConfig_1.makeCypressWebpackConfig)(config));

@@ -16,6 +16,7 @@ function client(uri, opts) {
         }
         // Connect the socket regardless of whether or not we have newly created it
         window.cypressSockets[fullNamespace].connect();
+        // @ts-expect-error TODO: fix type
         return window.cypressSockets[fullNamespace];
     }
     return (0, socket_io_client_1.default)(uri, opts);
@@ -33,6 +34,7 @@ function createWebsocket({ path, browserFamily }) {
         }
         // Connect the socket regardless of whether or not we have newly created it
         window.cypressSockets[fullNamespace].connect();
+        // @ts-expect-error TODO: fix type
         return window.cypressSockets[fullNamespace];
     }
     return (0, socket_io_client_1.default)({

@@ -23,7 +23,11 @@ const Cypress = (options, vite) => {
     // TODO: use async fs methods here
     // eslint-disable-next-line no-restricted-syntax
     let loader = fs_1.default.readFileSync(INIT_FILEPATH, 'utf8');
-    devServerEvents.on('dev-server:specs:changed', (specs) => {
+    devServerEvents.on('dev-server:specs:changed', ({ specs, options }) => {
+        if (options === null || options === void 0 ? void 0 : options.neededForJustInTimeCompile) {
+            // if an option is needed for just in time compile, no-op as this isn't supported in vite
+            return;
+        }
         debug(`dev-server:secs:changed: ${specs.map((spec) => spec.relative)}`);
         specsPathsSet = getSpecsPathsSet(specs);
     });
@@ -63,12 +67,7 @@ const Cypress = (options, vite) => {
         },
         configureServer: async (server) => {
             server.middlewares.use(`${base}index.html`, async (req, res) => {
-                let transformedIndexHtml = await server.transformIndexHtml(base, '');
-                const viteImport = `<script type="module" src="${options.cypressConfig.devServerPublicPathRoute}/@vite/client"></script>`;
-                // If we're doing cy-in-cy, we need to be able to access the Cypress instance from the parent frame.
-                if (process.env.CYPRESS_INTERNAL_VITE_OPEN_MODE_TESTING) {
-                    transformedIndexHtml = transformedIndexHtml.replace(viteImport, `<script>document.domain = 'localhost';</script>${viteImport}`);
-                }
+                const transformedIndexHtml = await server.transformIndexHtml(base, '');
                 return res.end(transformedIndexHtml);
             });
         },

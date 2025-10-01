@@ -71,10 +71,10 @@ async function nexusTypegen(cfg) {
 exports.nexusTypegen = nexusTypegen;
 let debounced = {};
 const nexusTypegenDebounced = (cfg) => {
-    var _a;
+    var _a, _b;
     debounced[cfg.filePath] =
         (_a = debounced[cfg.filePath]) !== null && _a !== void 0 ? _a : lodash_1.default.debounce(nexusTypegen, 500);
-    debounced[cfg.filePath](cfg);
+    (_b = debounced[cfg.filePath]) === null || _b === void 0 ? void 0 : _b.call(debounced, cfg);
 };
 async function watchNexusTypegen(cfg) {
     const dfd = (0, p_defer_1.default)();

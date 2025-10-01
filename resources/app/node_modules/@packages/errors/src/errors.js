@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isCypressErr = exports.log = exports.warning = exports.get = exports.stripAnsi = exports.cloneErr = exports.throwErr = exports.logWarning = exports.getError = exports.getMsgByType = exports.AllCypressErrors = exports.warnIfExplicitCiBuildId = void 0;
+exports.isCypressErr = exports.log = exports.warning = exports.get = exports.stripAnsi = exports.cloneErr = exports.throwErr = exports.logWarning = exports.getError = exports.AllCypressErrors = exports.warnIfExplicitCiBuildId = void 0;
 const tslib_1 = require("tslib");
 const ansi_up_1 = tslib_1.__importDefault(require("ansi_up"));
 const os_1 = tslib_1.__importDefault(require("os"));
@@ -13,6 +13,7 @@ exports.stripAnsi = strip_ansi_1.default;
 const errorUtils_1 = require("./errorUtils");
 const errTemplate_1 = require("./errTemplate");
 const stackUtils_1 = require("./stackUtils");
+const normalizeNetworkErrorMessage_1 = require("./normalizeNetworkErrorMessage");
 const ansi_up = new ansi_up_1.default();
 ansi_up.use_classes = true;
 const displayRetriesRemaining = function (tries) {
@@ -90,6 +91,10 @@ exports.AllCypressErrors = {
 
         This option will not have an effect in ${errTemplate_1.fmt.off(lodash_1.default.capitalize(browser))}. Tests that rely on web security being disabled will not run as expected.`;
     },
+    CHROME_137_LOAD_EXTENSION_NOT_SUPPORTED: () => {
+        return (0, errTemplate_1.errTemplate) `\
+        Google Chrome v137 and higher does not allow loading extensions via --load-extension. If you need to load an extension to test with Cypress, please use Chrome for Testing, Chromium, or another Chrome variant that supports loading extensions.`;
+    },
     BROWSER_UNSUPPORTED_LAUNCH_OPTION: (browser, options) => {
         return (0, errTemplate_1.errTemplate) `\
         Warning: The following browser launch options were provided but are not supported by ${errTemplate_1.fmt.highlightSecondary(browser)}
@@ -128,12 +133,6 @@ exports.AllCypressErrors = {
 
         ${errTemplate_1.fmt.highlightSecondary(arg2)}`;
     },
-    NOT_LOGGED_IN: () => {
-        return (0, errTemplate_1.errTemplate) `\
-        You're not logged in.
-
-        Run ${errTemplate_1.fmt.highlight(`cypress open`)} to open Cypress and log in.`;
-    },
     TESTS_DID_NOT_START_RETRYING: (arg1) => {
         return (0, errTemplate_1.errTemplate) `Timed out waiting for the browser to connect. ${errTemplate_1.fmt.off(arg1)}`;
     },
@@ -149,10 +148,11 @@ exports.AllCypressErrors = {
     CLOUD_API_RESPONSE_FAILED_RETRYING: (arg1) => {
         const time = (0, errorUtils_1.pluralize)('time', arg1.tries);
         const delay = errorUtils_1.humanTime.long(arg1.delayMs, false);
+        const message = (0, normalizeNetworkErrorMessage_1.normalizeNetworkErrorMessage)(arg1.response);
         return (0, errTemplate_1.errTemplate) `\
         We encountered an unexpected error communicating with our servers.
 
-        ${errTemplate_1.fmt.highlightSecondary(arg1.response)}
+        ${errTemplate_1.fmt.highlightSecondary(message)}
 
         We will retry ${errTemplate_1.fmt.off(arg1.tries)} more ${errTemplate_1.fmt.off(time)} in ${errTemplate_1.fmt.off(delay)}...
         `;
@@ -160,10 +160,11 @@ exports.AllCypressErrors = {
         /* eslint-disable indent */
     },
     CLOUD_CANNOT_PROCEED_IN_PARALLEL: (arg1) => {
+        const message = (0, normalizeNetworkErrorMessage_1.normalizeNetworkErrorMessage)(arg1.response);
         return (0, errTemplate_1.errTemplate) `\
         We encountered an unexpected error communicating with our servers.
 
-        ${errTemplate_1.fmt.highlightSecondary(arg1.response)}
+        ${errTemplate_1.fmt.highlightSecondary(message)}
 
         Because you passed the ${errTemplate_1.fmt.flag(`--parallel`)} flag, this run cannot proceed since it requires a valid response from our servers.
 
@@ -173,10 +174,11 @@ exports.AllCypressErrors = {
         })}`;
     },
     CLOUD_CANNOT_PROCEED_IN_SERIAL: (arg1) => {
+        const message = (0, normalizeNetworkErrorMessage_1.normalizeNetworkErrorMessage)(arg1.response);
         return (0, errTemplate_1.errTemplate) `\
         We encountered an unexpected error communicating with our servers.
 
-        ${errTemplate_1.fmt.highlightSecondary(arg1.response)}
+        ${errTemplate_1.fmt.highlightSecondary(message)}
 
         Because you passed the ${errTemplate_1.fmt.flag(`--record`)} flag, this run cannot proceed since it requires a valid response from our servers.
 
@@ -186,10 +188,11 @@ exports.AllCypressErrors = {
         })}`;
     },
     CLOUD_UNKNOWN_INVALID_REQUEST: (arg1) => {
+        const message = (0, normalizeNetworkErrorMessage_1.normalizeNetworkErrorMessage)(arg1.response);
         return (0, errTemplate_1.errTemplate) `\
         We encountered an unexpected error communicating with our servers.
 
-        ${errTemplate_1.fmt.highlightSecondary(arg1.response)}
+        ${errTemplate_1.fmt.highlightSecondary(message)}
 
         There is likely something wrong with the request.
 
@@ -270,6 +273,7 @@ exports.AllCypressErrors = {
         The existing run is: ${errTemplate_1.fmt.url(arg1.runUrl)}
 
         ${errTemplate_1.fmt.listFlags(arg1, {
+            tags: '--tag',
             group: '--group',
             parallel: '--parallel',
             ciBuildId: '--ciBuildId',
@@ -377,16 +381,6 @@ exports.AllCypressErrors = {
 
         https://on.cypress.io/auto-cancellation-mismatch`;
     },
-    DEPRECATED_BEFORE_BROWSER_LAUNCH_ARGS: () => {
-        return (0, errTemplate_1.errTemplate) `\
-      Deprecation Warning: The ${errTemplate_1.fmt.highlight(`before:browser:launch`)} plugin event changed its signature in ${errTemplate_1.fmt.cypressVersion(`4.0.0`)}
-
-      The event switched from yielding the second argument as an ${errTemplate_1.fmt.highlightSecondary(`array`)} of browser arguments to an options ${errTemplate_1.fmt.highlightSecondary(`object`)} with an ${errTemplate_1.fmt.highlightSecondary(`args`)} property.
-
-      We've detected that your code is still using the previous, deprecated interface signature.
-
-      This code will not work in a future version of Cypress. Please see the upgrade guide: https://on.cypress.io/deprecated-before-browser-launch-args`;
-    },
     DUPLICATE_TASK_KEY: (arg1) => {
         return (0, errTemplate_1.errTemplate) `\
       Warning: Multiple attempts to register the following task(s):
@@ -483,10 +477,6 @@ exports.AllCypressErrors = {
         If you meant to have this run recorded please additionally pass this flag:
 
           ${errTemplate_1.fmt.terminal('cypress run --record')}
-
-        If you don't want to record these runs, you can silence this warning:
-
-          ${errTemplate_1.fmt.terminal('cypress run --record false')}
 
         https://on.cypress.io/recording-project-runs`;
     },
@@ -604,11 +594,12 @@ exports.AllCypressErrors = {
         ${errTemplate_1.fmt.highlightSecondary(error)}`;
     },
     CLOUD_PROTOCOL_UPLOAD_STREAM_STALL_FAILURE: (error) => {
-        const kbpsThreshold = (error.chunkSizeKB * 8) / (error.maxActivityDwellTime / 1000);
+        const dwellTimeSeconds = error.maxActivityDwellTime / 1000;
+        const kbpsThreshold = (error.chunkSizeBytes / 1024) / dwellTimeSeconds;
         return (0, errTemplate_1.errTemplate) `\
         Warning: We encountered slow network conditions while uploading the Test Replay recording for this spec.
 
-        The upload transfer rate fell below ${errTemplate_1.fmt.highlightSecondary(`${kbpsThreshold}kbps`)} over a sampling period of ${errTemplate_1.fmt.highlightSecondary(`${error.maxActivityDwellTime}ms`)}.
+        The upload transfer rate fell below ${errTemplate_1.fmt.highlightSecondary(`${kbpsThreshold}kbps`)} over a sampling period of ${errTemplate_1.fmt.highlightSecondary(`${dwellTimeSeconds} seconds`)}.
 
         To prevent long CI execution durations, this Test Replay recording will not be uploaded.
 
@@ -1001,30 +992,6 @@ exports.AllCypressErrors = {
 
         https://on.cypress.io/installing-cypress`;
     },
-    FREE_PLAN_EXCEEDS_MONTHLY_PRIVATE_TESTS: (arg1) => {
-        return (0, errTemplate_1.errTemplate) `\
-        You've exceeded the limit of private test results under your free plan this month. ${getUsedTestsMessage(arg1.limit, arg1.usedTestsMessage)}
-
-        To continue recording tests this month you must upgrade your account. Please visit your billing to upgrade to another billing plan.
-
-        ${errTemplate_1.fmt.off(arg1.link)}`;
-    },
-    FREE_PLAN_IN_GRACE_PERIOD_EXCEEDS_MONTHLY_PRIVATE_TESTS: (arg1) => {
-        return (0, errTemplate_1.errTemplate) `\
-        You've exceeded the limit of private test results under your free plan this month. ${getUsedTestsMessage(arg1.limit, arg1.usedTestsMessage)}
-
-        Your plan is now in a grace period, which means your tests will still be recorded until ${errTemplate_1.fmt.off(arg1.gracePeriodMessage)}. Please upgrade your plan to continue recording tests on Cypress Cloud in the future.
-
-        ${errTemplate_1.fmt.off(arg1.link)}`;
-    },
-    PAID_PLAN_EXCEEDS_MONTHLY_PRIVATE_TESTS: (arg1) => {
-        return (0, errTemplate_1.errTemplate) `\
-        You've exceeded the limit of private test results under your current billing plan this month. ${getUsedTestsMessage(arg1.limit, arg1.usedTestsMessage)}
-
-        To upgrade your account, please visit your billing to upgrade to another billing plan.
-
-        ${errTemplate_1.fmt.off(arg1.link)}`;
-    },
     FREE_PLAN_EXCEEDS_MONTHLY_TESTS: (arg1) => {
         return (0, errTemplate_1.errTemplate) `\
         You've exceeded the limit of test results under your free plan this month. ${getUsedTestsMessage(arg1.limit, arg1.usedTestsMessage)}
@@ -1161,6 +1128,9 @@ exports.AllCypressErrors = {
     CDP_RETRYING_CONNECTION: (attempt, browserName, connectRetryThreshold) => {
         return (0, errTemplate_1.errTemplate) `Still waiting to connect to ${errTemplate_1.fmt.off(lodash_1.default.capitalize(browserName))}, retrying in 1 second ${errTemplate_1.fmt.meta(`(attempt ${attempt}/${connectRetryThreshold})`)}`;
     },
+    CDP_FIREFOX_DEPRECATED: () => {
+        return (0, errTemplate_1.errTemplate) `Since Firefox 129, Chrome DevTools Protocol (CDP) has been deprecated in Firefox. In Firefox 135 and above, Cypress defaults to automating the Firefox browser with WebDriver BiDi. Cypress will no longer support CDP within Firefox in the future and is planned for removal in Cypress 15.`;
+    },
     BROWSER_PROCESS_CLOSED_UNEXPECTEDLY: (browserName) => {
         return (0, errTemplate_1.errTemplate) `\
       We detected that the ${errTemplate_1.fmt.highlight(browserName)} browser process closed unexpectedly.
@@ -1222,6 +1192,12 @@ exports.AllCypressErrors = {
 
         You can safely remove this option from your config.`;
     },
+    EXPERIMENTAL_JIT_COMPILE_REMOVED: () => {
+        return (0, errTemplate_1.errTemplate) `\
+        The ${errTemplate_1.fmt.highlight(`experimentalJustInTimeCompile`)} configuration option was removed in ${errTemplate_1.fmt.cypressVersion(`14.0.0`)}.
+        A new ${errTemplate_1.fmt.highlightSecondary(`justInTimeCompile`)} configuration option is available and is now ${errTemplate_1.fmt.highlightSecondary(`true`)} by default.
+        You can safely remove this option from your config.`;
+    },
     // TODO: verify configFile is absolute path
     // TODO: make this relative path, not absolute
     EXPERIMENTAL_COMPONENT_TESTING_REMOVED: (arg1) => {
@@ -1230,9 +1206,9 @@ exports.AllCypressErrors = {
 
         Please remove this flag from: ${errTemplate_1.fmt.path(arg1.configFile)}
 
-        Component Testing is now a standalone command. You can now run your component tests with:
+        Component Testing is now a supported testing type. You can run your component tests with:
 
-          ${errTemplate_1.fmt.terminal(`cypress open-ct`)}
+          ${errTemplate_1.fmt.terminal(`cypress open --component`)}
 
         https://on.cypress.io/migration-guide`;
     },
@@ -1319,24 +1295,32 @@ exports.AllCypressErrors = {
 
         ${errTemplate_1.fmt.code(code)}`;
     },
-    EXPERIMENTAL_JIT_COMPONENT_TESTING: () => {
+    JIT_COMPONENT_TESTING: () => {
         return (0, errTemplate_1.errTemplate) `\
-    The ${errTemplate_1.fmt.highlight(`experimentalJustInTimeCompile`)} experiment is currently only supported for Component Testing.
-
-    If you have feedback about the experiment, please join the discussion here: http://on.cypress.io/just-in-time-compile`;
+    The ${errTemplate_1.fmt.highlight(`justInTimeCompile`)} configuration is only supported for Component Testing.`;
     },
-    EXPERIMENTAL_USE_DEFAULT_DOCUMENT_DOMAIN_E2E_ONLY: () => {
-        const code = (0, errTemplate_1.errPartial) `
-    {
-      e2e: {
-        experimentalSkipDomainInjection: ['*.salesforce.com', '*.force.com', '*.google.com', 'google.com']
-      },
-    }`;
+    EXPERIMENTAL_SKIP_DOMAIN_INJECTION_REMOVED: () => {
         return (0, errTemplate_1.errTemplate) `\
-        The ${errTemplate_1.fmt.highlight(`experimentalSkipDomainInjection`)} experiment is currently only supported for End to End Testing and must be configured as an e2e testing type property: ${errTemplate_1.fmt.highlightSecondary(`e2e.experimentalSkipDomainInjection`)}.
-        The suggested values are only a recommendation.
+      The ${errTemplate_1.fmt.highlight(`experimentalSkipDomainInjection`)} experiment is over. ${errTemplate_1.fmt.highlight('document.domain')} injection is now off by default.
 
-        ${errTemplate_1.fmt.code(code)}`;
+      Read the migration guide for Cypress v14.0.0: https://on.cypress.io/migration-guide
+    `;
+    },
+    // TODO: link to docs on injectDocumentDomain
+    INJECT_DOCUMENT_DOMAIN_DEPRECATION: () => {
+        return (0, errTemplate_1.errTemplate) `\
+      The ${errTemplate_1.fmt.highlight('injectDocumentDomain')} option is deprecated. Interactions with intra-test navigations to differing hostnames must now be wrapped in ${errTemplate_1.fmt.highlight('cy.origin')} commands, even if the hostname is a subdomain. This configuration option will be removed in a future version of Cypress.
+    
+      Read the documentation for the injectDocumentDomain configuration option: https://on.cypress.io/inject-document-domain-configuration
+    `;
+    },
+    INJECT_DOCUMENT_DOMAIN_E2E_ONLY: () => {
+        // TODO: link to docs on injectDocumentDomain
+        return (0, errTemplate_1.errTemplate) `\
+      The ${errTemplate_1.fmt.highlight('injectDocumentDomain')} option is only available for E2E testing.
+
+      Read the documentation for the injectDocumentDomain configuration option: https://on.cypress.io/inject-document-domain-configuration
+    `;
     },
     FIREFOX_GC_INTERVAL_REMOVED: () => {
         return (0, errTemplate_1.errTemplate) `\
@@ -1358,7 +1342,6 @@ exports.AllCypressErrors = {
       https://on.cypress.io/test-retries
       `;
     },
-    // TODO: test this
     INVALID_CONFIG_OPTION: (arg1) => {
         const phrase = arg1.length > 1 ? 'options are' : 'option is';
         return (0, errTemplate_1.errTemplate) `\
@@ -1576,7 +1559,7 @@ exports.AllCypressErrors = {
       {
         component: {
           devServer: {
-            framework: 'create-react-app', ${errTemplate_1.fmt.comment('// Your framework')}
+            framework: 'react', ${errTemplate_1.fmt.comment('// Your framework')}
             bundler: 'webpack' ${errTemplate_1.fmt.comment('// Your dev server')}
           }
         }
@@ -1769,7 +1752,7 @@ exports.AllCypressErrors = {
 
       ${errTemplate_1.fmt.listItems(deps, { prefix: ' - ' })}
 
-      If you're experiencing problems, downgrade dependencies and restart Cypress.
+      If you're experiencing problems, ensure your dependencies are on a supported version and restart Cypress.
     `;
     },
     PROXY_ENCOUNTERED_INVALID_HEADER_NAME: (header, method, url, error) => {
@@ -1793,11 +1776,6 @@ exports.AllCypressErrors = {
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _typeCheck = exports.AllCypressErrors;
-function getMsgByType(type, ...args) {
-    const err = (0, exports.getError)(type, ...args);
-    return err.message;
-}
-exports.getMsgByType = getMsgByType;
 /**
  * Given an error name & params for the error, returns a "CypressError",
  * with a forBrowser property, used when we want to format the value for sending to

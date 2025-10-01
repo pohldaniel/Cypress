@@ -10575,7 +10575,7 @@ legend {
 }
 
 .reporter {
-  background-color: #1b1e2e;
+  background-color: #161827;
   bottom: 0;
   color: #d0d2e0;
   display: -webkit-box;
@@ -11167,7 +11167,7 @@ button.switch span.indicator {
   cursor: pointer;
 }
 .reporter .attempt-name .attempt-tag:hover {
-  background-color: #1b1e2e;
+  background-color: #161827;
 }
 .reporter .attempt-name .collapsible-more {
   display: none;
@@ -11195,7 +11195,7 @@ button.switch span.indicator {
 }
 
 .reporter .commands-container {
-  background-color: #171926;
+  background-color: #121522;
   min-width: 170px;
   padding: 0;
 }
@@ -11232,14 +11232,14 @@ button.switch span.indicator {
 .reporter .command-is-event .command-message {
   color: #9095ad;
 }
-.reporter .command-type-child .command-method:before {
+.reporter .command-type-child .command-method-child:before {
   float: left;
   content: "-";
   margin-right: 2px;
 }
 .reporter .command-wrapper {
-  border-left: 2px solid #171926;
-  background-color: #171926;
+  border-left: 2px solid #121522;
+  background-color: #121522;
   color: #9095ad;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -11279,7 +11279,6 @@ button.switch span.indicator {
   margin-left: 0;
 }
 .reporter .command-number-column {
-  color: #5a5f7a;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   min-height: 1px;
@@ -11288,32 +11287,49 @@ button.switch span.indicator {
   padding-bottom: 4px;
   text-align: right;
   width: 24px;
+  color: #5a5f7a;
 }
 .reporter .command-number-column + span.command-pin-target {
-  margin-left: 25px;
+  margin-left: 14px;
 }
 .reporter .command-pin-target.command-group {
-  border-left: 1px dotted #747994;
+  border-left: 1px dotted #5a5f7a;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #747994, #747994 4px);
-  padding-left: 12px;
+  border-image-source: repeating-linear-gradient(0deg, transparent, #5a5f7a, #5a5f7a 2px);
   min-height: 28px;
 }
 .reporter .command-pin-target.command-group .command-group-block {
-  border-left: 1px dotted #747994;
+  border-left: 1px dotted #5a5f7a;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #747994, #747994 4px);
-  width: 12px;
+  border-image-source: repeating-linear-gradient(0deg, transparent, #5a5f7a, #5a5f7a 2px);
+  width: 18px;
+  min-width: 18px;
+  max-width: 18px;
   min-height: 28px;
-  min-width: 12px;
+}
+.reporter .command-group-no-children {
+  padding-left: 15px;
+}
+.reporter .command-wrapper-text-group {
+  padding-left: 15px;
+  width: 100%;
+}
+.reporter .command-wrapper-text-group-parent {
+  padding-left: 5px;
+}
+.reporter .nested-group-expander .command-expander {
+  position: relative;
+  margin-left: -16px !important;
 }
 .reporter .command-info {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  -ms-flex-item-align: center;
+  align-self: center;
   display: -webkit-box;
   font-weight: 600;
   margin-left: 0;
   overflow: hidden;
-  padding-top: 4px;
-  padding-bottom: 4px;
   width: 100%;
   -webkit-line-clamp: 100;
   -webkit-box-orient: vertical;
@@ -11366,7 +11382,7 @@ button.switch span.indicator {
   min-width: fit-content;
 }
 .reporter .command-state-passed {
-  border-left: 2px solid #171926;
+  border-left: 2px solid #121522;
 }
 .reporter .command-state-passed.command-is-interactive:hover {
   border-left: 2px solid #2e3247;
@@ -11444,13 +11460,13 @@ button.switch span.indicator {
   border-color: #edbb4a;
   border-left: 1px dotted #edbb4a;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #edbb4a, #edbb4a 4px);
+  border-image-source: repeating-linear-gradient(0deg, transparent, #edbb4a, #edbb4a 2px);
 }
 .reporter .command-state-warned .command-group .command-group-block {
   border-color: #edbb4a;
   border-left: 1px dotted #edbb4a;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #edbb4a, #edbb4a 4px);
+  border-image-source: repeating-linear-gradient(0deg, transparent, #edbb4a, #edbb4a 2px);
 }
 .reporter .command-state-failed {
   color: #f59aa9;
@@ -11474,13 +11490,13 @@ button.switch span.indicator {
   border-color: #f59aa9;
   border-left: 1px dotted #f59aa9;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #f59aa9, #f59aa9 4px);
+  border-image-source: repeating-linear-gradient(0deg, transparent, #f59aa9, #f59aa9 2px);
 }
 .reporter .command-state-failed .command-group .command-group-block {
   border-color: #f59aa9;
   border-left: 1px dotted #f59aa9;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #f59aa9, #f59aa9 4px);
+  border-image-source: repeating-linear-gradient(0deg, transparent, #f59aa9, #f59aa9 2px);
 }
 .reporter .command-name-assert .command-method span {
   border-radius: 2px;
@@ -11587,7 +11603,7 @@ button.switch span.indicator {
   font-size: 12px;
   line-height: 1;
   margin-top: -1px;
-  margin-left: 10px;
+  margin-left: 12px;
   outline: none;
   text-align: right;
   width: 15px;
@@ -11596,19 +11612,14 @@ button.switch span.indicator {
 .reporter .command-pin .icon-light {
   fill: #4b1a83;
 }
-.reporter .command-expander-column {
+.reporter .command-expander-column-group, .reporter .command-expander-column {
   -ms-flex-negative: 0;
   flex-shrink: 0;
-  padding-left: 10px;
-  padding-right: 5px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  width: 25px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
-.reporter .command-expander-column .command-expander {
+.reporter .command-expander-column-group .command-expander, .reporter .command-expander-column .command-expander {
   color: #9095ad;
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
@@ -11616,14 +11627,35 @@ button.switch span.indicator {
   transition: -webkit-transform 150ms ease-out;
   transition: transform 150ms ease-out;
   transition: transform 150ms ease-out, -webkit-transform 150ms ease-out;
-  margin-top: 5px;
 }
-.reporter .command-expander-column .command-expander path {
+.reporter .command-expander-column-group .command-expander path, .reporter .command-expander-column .command-expander path {
   stroke: #5a5f7a;
 }
-.reporter .command-expander-column .command-expander-is-open {
+.reporter .command-expander-column-group .command-expander-is-open, .reporter .command-expander-column .command-expander-is-open {
   -webkit-transform: rotate(0deg);
   transform: rotate(0deg);
+}
+.reporter .command-expander-column {
+  padding: 4px 5px 4px 11px;
+  width: 25px;
+}
+.reporter .command-expander-column .command-expander {
+  margin-top: 5px;
+}
+.reporter .command-expander-column-group {
+  width: 18px;
+  min-width: 18px;
+  max-width: 18px;
+  padding: 0;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+.reporter .command-expander-column-group .command-expander {
+  margin: 0;
 }
 .reporter .command-is-pinned {
   background: #151a50;
@@ -11638,7 +11670,7 @@ button.switch span.indicator {
   border-left: 2px solid #a06ce4;
 }
 .reporter .no-commands {
-  background-color: #1b1e2e;
+  background-color: #161827;
   border: 1px solid #2e3247;
   border-radius: 3px;
   -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
@@ -11648,7 +11680,7 @@ button.switch span.indicator {
 }
 
 .reporter .error {
-  background-color: #1b1e2e;
+  background-color: #161827;
   min-height: 20px;
   padding: 24px;
 }
@@ -11690,26 +11722,24 @@ button.switch span.indicator {
 }
 .reporter .recovered-test-err .runnable-err-header,
 .reporter .recovered-test-err .runnable-err-body {
-  padding-left: 49px;
+  padding-left: 38px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 .reporter .recovered-test-err .runnable-err-header .err-group-block,
 .reporter .recovered-test-err .runnable-err-body .err-group-block {
+  width: 18px;
+  min-width: 18px;
+  max-width: 18px;
   border-left: 1px dotted #f59aa9;
   border-image-slice: 0 0 0 1;
-  border-image-source: repeating-linear-gradient(0deg, transparent, #f59aa9, #f59aa9 4px);
-  width: 12px;
-  min-width: 12px;
+  border-image-source: repeating-linear-gradient(0deg, transparent, #f59aa9, #f59aa9 2px);
 }
 .reporter .recovered-test-err .runnable-err-header .err-group-block:first-of-type,
 .reporter .recovered-test-err .runnable-err-body .err-group-block:first-of-type {
-  width: 13px;
-  min-width: 13px;
-}
-.reporter .recovered-test-err .runnable-err-header > .runnable-err-name {
-  padding: 5px 4px 5px 15px;
+  width: 16px;
+  min-width: 16px;
 }
 .reporter .recovered-test-err .runnable-err-content {
   padding: 0 12px 0 0;
@@ -11748,14 +11778,30 @@ button.switch span.indicator {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding-left: 18px;
 }
-.reporter .runnable-err-header svg {
+.reporter .runnable-err-header .runnable-err-icon {
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  min-height: 1px;
+  max-height: 28px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  text-align: right;
+  width: 24px;
+}
+.reporter .runnable-err-header .runnable-err-icon.runnable-err-icon-group {
+  width: auto;
+}
+.reporter .runnable-err-header .runnable-err-icon svg {
   color: #e45770;
   -ms-flex-item-align: center;
   align-self: center;
 }
 .reporter .runnable-err-header .runnable-err-name {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  -ms-flex-item-align: center;
+  align-self: center;
   color: #f59aa9;
   -webkit-box-flex: 1;
   -ms-flex: auto;
@@ -11763,7 +11809,7 @@ button.switch span.indicator {
   font-size: 12px;
   font-weight: 600;
   line-height: 20px;
-  padding: 5px 4px 5px 24px;
+  margin-left: 14px;
 }
 .reporter .runnable-err-docs-url {
   margin-left: 0.5em;
@@ -11875,7 +11921,7 @@ button.switch span.indicator {
   content: " ";
 }
 .reporter .test-err-code-frame {
-  background-color: #1b1e2e;
+  background-color: #161827;
   border: 1px dashed rgba(245, 154, 169, 0.1);
   border-radius: 4px;
   margin: 0 0 10px;
@@ -12122,7 +12168,7 @@ pre[class*=language-] {
 
 :not(pre) > code[class*=language-],
 pre[class*=language-] {
-  background: #1b1e2e;
+  background: #161827;
 }
 
 .token.punctuation {
@@ -12157,7 +12203,7 @@ pre[class*=language-] {
 .token.important,
 .token.variable {
   color: #db7903;
-  background: #1b1e2e;
+  background: #161827;
 }
 
 .token.atrule,
@@ -12209,7 +12255,7 @@ pre[class*=language-] {
 }
 
 .reporter header {
-  background-color: #1b1e2e;
+  background-color: #161827;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -12437,10 +12483,10 @@ pre[class*=language-] {
 }
 
 .reporter .instruments-container .instrument-content {
-  background-color: #171926;
-  border-left: 1px solid #171926;
+  background-color: #121522;
+  border-left: 1px solid #121522;
   border-radius: 0 3px 3px;
-  border-right: 1px solid #171926;
+  border-right: 1px solid #121522;
   margin-bottom: 10px;
   overflow: auto;
   padding: 0 2px 0 12px;
@@ -12466,7 +12512,7 @@ pre[class*=language-] {
 }
 
 .testing-preferences .testing-preferences-header {
-  background: #1b1e2e;
+  background: #161827;
   display: block;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 14px;
@@ -12521,7 +12567,7 @@ pre[class*=language-] {
   min-height: 0;
 }
 .reporter .container {
-  background-color: #1b1e2e;
+  background-color: #161827;
   -webkit-box-flex: 2;
   -ms-flex-positive: 2;
   flex-grow: 2;
@@ -12537,7 +12583,7 @@ pre[class*=language-] {
   padding-left: 0;
 }
 .reporter .no-tests {
-  background-color: #1b1e2e;
+  background-color: #161827;
   min-height: 20px;
   padding: 24px;
 }
@@ -12591,7 +12637,7 @@ pre[class*=language-] {
 .reporter .runnable {
   width: 100%;
   color: #afb3c7;
-  background-color: #1b1e2e;
+  background-color: #161827;
   overflow: auto;
   line-height: 18px;
   padding-left: 0;
@@ -12601,7 +12647,7 @@ pre[class*=language-] {
   padding: 0 0 0 4px;
 }
 .reporter .runnable .runnable-wrapper .collapsible-header:focus .collapsible-header-inner {
-  background-color: #1b1e2e;
+  background-color: #161827;
   cursor: pointer;
 }
 .reporter .runnable .runnable-wrapper .collapsible-header .collapsible-header-inner {
@@ -12786,7 +12832,7 @@ pre[class*=language-] {
   display: flex;
 }
 .reporter .runnable-header {
-  background: #1b1e2e;
+  background: #161827;
   display: block;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 14px;

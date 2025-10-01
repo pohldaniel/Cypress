@@ -5,12 +5,14 @@ const tslib_1 = require("tslib");
 const path_1 = tslib_1.__importDefault(require("path"));
 const debug_1 = tslib_1.__importDefault(require("debug"));
 const CypressCTWebpackPlugin_1 = require("./CypressCTWebpackPlugin");
+const util_1 = require("./util");
+const webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
 const debug = (0, debug_1.default)('cypress:webpack-dev-server:makeDefaultWebpackConfig');
 const OUTPUT_PATH = path_1.default.join(__dirname, 'dist');
 const OsSeparatorRE = RegExp(`\\${path_1.default.sep}`, 'g');
 const posixSeparator = '/';
 function makeCypressWebpackConfig(config) {
-    const { devServerConfig: { cypressConfig: { experimentalJustInTimeCompile, port, projectRoot, devServerPublicPathRoute, supportFile, indexHtmlFile, isTextTerminal: isRunMode, }, specs: files, devServerEvents, framework, }, sourceWebpackModulesResult: { webpack: { module: webpack, majorVersion: webpackMajorVersion, }, htmlWebpackPlugin: { module: HtmlWebpackPlugin, majorVersion: htmlWebpackPluginVersion, importPath: htmlWebpackPluginImportPath, }, webpackDevServer: { majorVersion: webpackDevServerMajorVersion, }, }, } = config;
+    const { devServerConfig: { cypressConfig: { justInTimeCompile, port, projectRoot, devServerPublicPathRoute, supportFile, indexHtmlFile, isTextTerminal: isRunMode, }, specs: files, devServerEvents, framework, }, sourceWebpackModulesResult: { webpack: { module: webpack, majorVersion: webpackMajorVersion, }, htmlWebpackPlugin: { module: HtmlWebpackPlugin, majorVersion: htmlWebpackPluginVersion, importPath: htmlWebpackPluginImportPath, }, webpackDevServer: { majorVersion: webpackDevServerMajorVersion, }, }, } = config;
     const webpackDevServerPort = port !== null && port !== void 0 ? port : undefined;
     debug(`Using HtmlWebpackPlugin version ${htmlWebpackPluginVersion} from ${htmlWebpackPluginImportPath}`);
     const optimization = {
@@ -52,24 +54,20 @@ function makeCypressWebpackConfig(config) {
                 webpack,
                 indexHtmlFile,
             }),
+            ...((0, util_1.isWebpackBundleAnalyzerEnabled)() ? [new webpack_bundle_analyzer_1.BundleAnalyzerPlugin()] : []),
         ],
         devtool: 'inline-source-map',
     };
+    if ((0, util_1.isWebpackBundleAnalyzerEnabled)()) {
+        (0, debug_1.default)(util_1.WBADebugNamespace)('webpack-bundle-analyzer is enabled.');
+    }
     if (isRunMode) {
-        // if experimentalJustInTimeCompile is configured, we need to watch for file changes as the spec entries are going to be updated per test
-        const ignored = experimentalJustInTimeCompile ? /node_modules/ : '**/*';
+        // if justInTimeCompile is configured, we need to watch for file changes as the spec entries are going to be updated per test
+        const ignored = justInTimeCompile ? /node_modules/ : '**/*';
         // Disable file watching when executing tests in `run` mode
         finalConfig.watchOptions = {
             ignored,
         };
-    }
-    if (webpackDevServerMajorVersion === 5) {
-        return Object.assign(Object.assign({}, finalConfig), { devServer: {
-                port: webpackDevServerPort,
-                client: {
-                    overlay: false,
-                },
-            } });
     }
     if (webpackDevServerMajorVersion === 4) {
         return Object.assign(Object.assign({}, finalConfig), { devServer: {
@@ -79,10 +77,12 @@ function makeCypressWebpackConfig(config) {
                 },
             } });
     }
-    // @ts-ignore
+    // default is webpack-dev-server v5
     return Object.assign(Object.assign({}, finalConfig), { devServer: {
             port: webpackDevServerPort,
-            overlay: false,
+            client: {
+                overlay: false,
+            },
         } });
 }
 exports.makeCypressWebpackConfig = makeCypressWebpackConfig;

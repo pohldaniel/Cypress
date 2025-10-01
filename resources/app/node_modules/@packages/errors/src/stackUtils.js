@@ -6,7 +6,7 @@ const lodash_1 = tslib_1.__importDefault(require("lodash"));
 exports.stackLineRegex = /^\s*(at )?.*@?(?:\(?.*(?::\d+:\d+|<unknown>|\[native code\])+\)?)$/;
 // returns tuple of [message, stack]
 const splitStack = (stack) => {
-    const lines = stack.split('\n');
+    const lines = stack === null || stack === void 0 ? void 0 : stack.split('\n');
     return lodash_1.default.reduce(lines, (memo, line) => {
         if (memo.messageEnded || exports.stackLineRegex.test(line)) {
             memo.messageEnded = true;

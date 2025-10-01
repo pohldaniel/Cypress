@@ -26,10 +26,10 @@ const CypressSourcemap = (options, vite) => {
                     */
                     const sourcemap = this.getCombinedSourcemap();
                     const sourcemapUrl = sourcemap.toUrl();
-                    if (/\/\/# sourceMappingURL=/i.test(code)) {
+                    if (/\/\/# sourceMappingURL=(?!['"])/i.test(code)) {
                         // If the code already has a sourceMappingURL, it is not an inlined sourcemap
                         // and we should replace it with the new sourcemap
-                        code = code.replace(/\/\/# sourceMappingURL=(.*)$/m, `//# sourceMappingURL=${sourcemapUrl}`);
+                        code = code.replace(/\/\/# sourceMappingURL=(?!['"])(.*)$/m, `//# sourceMappingURL=${sourcemapUrl}`);
                     }
                     else {
                         // If the code does not have a sourceMappingURL, we should append the new sourcemap

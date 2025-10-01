@@ -144,7 +144,7 @@ class SourcemapSupport {
                 return pos.column + 1;
             };
             frame.getScriptNameOrSourceURL = function getScriptNameOrSourceURL() {
-                return pos.source || pos.name;
+                return pos.source || pos.name || '';
             };
             frame.codeFrames = pos.codeFrames;
             return frame;

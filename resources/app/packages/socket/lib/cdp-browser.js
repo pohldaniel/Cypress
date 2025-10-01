@@ -9,7 +9,8 @@ const utils_1 = require("./utils");
 class CDPBrowserSocket extends component_emitter_1.default {
     constructor(namespace) {
         super();
-        this.emit = (event, ...args) => {
+        // @ts-expect-error TODO: fix emit type
+        this.emit = async (event, ...args) => {
             // Generate a unique key for this event
             const uuid = (0, uuid_1.v4)();
             let callback;
@@ -19,18 +20,18 @@ class CDPBrowserSocket extends component_emitter_1.default {
             if (callback) {
                 this.once(uuid, callback);
             }
-            (0, utils_1.encode)([event, uuid, args], this._namespace).then((encoded) => {
+            await (0, utils_1.encode)([event, uuid, args], this._namespace).then((encoded) => {
                 window[`cypressSendToServer-${this._namespace}`](JSON.stringify(encoded));
             });
             return this;
         };
         this._namespace = namespace;
-        const send = (payload) => {
+        const send = async (payload) => {
             const parsed = JSON.parse(payload);
-            (0, utils_1.decode)(parsed).then((decoded) => {
+            await (0, utils_1.decode)(parsed).then(async (decoded) => {
                 const [event, callbackEvent, args] = decoded;
                 super.emit(event, ...args);
-                this.emit(callbackEvent);
+                await this.emit(callbackEvent);
             });
         };
         let cypressSocket = window[`cypressSocket-${this._namespace}`];

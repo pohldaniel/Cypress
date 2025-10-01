@@ -23,9 +23,6 @@ const cypressWebpackPath = (config) => {
 };
 exports.cypressWebpackPath = cypressWebpackPath;
 const frameworkWebpackMapper = {
-    'create-react-app': 'react-scripts',
-    'vue-cli': '@vue/cli-service',
-    'nuxt': '@nuxt/webpack',
     react: undefined,
     vue: undefined,
     next: 'next',
@@ -143,7 +140,7 @@ function sourceWebpackDevServer(config, webpackMajorVersion, framework) {
     webpackDevServer.importPath = path_1.default.dirname(webpackDevServerJsonPath);
     webpackDevServer.packageJson = require(webpackDevServerJsonPath);
     webpackDevServer.module = require(webpackDevServer.importPath);
-    webpackDevServer.majorVersion = getMajorVersion(webpackDevServer.packageJson, [3, 4, 5]);
+    webpackDevServer.majorVersion = getMajorVersion(webpackDevServer.packageJson, [4, 5]);
     debug('WebpackDevServer: Successfully sourced webpack-dev-server - %o', webpackDevServer);
     if (webpackMajorVersion < 5 && webpackDevServer.majorVersion === 5) {
         const json = webpackDevServer.packageJson;
